@@ -254,7 +254,7 @@ function renderDJs() {
                 <div class="dj-info">
                     <h3>${nombre || 'DJ Sin Nombre'}</h3>
                     <p class="dj-specialty">${especialidad || 'Especialidad'}</p>
-                    <p class="dj-description">${descripcion || 'Descripción del DJ'}</p>
+                    <p class="dj-description">${descripcion || ''}</p>
                     ${enlace ? `
                         <a href="${enlace}" class="dj-link" target="_blank" rel="noopener noreferrer">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
