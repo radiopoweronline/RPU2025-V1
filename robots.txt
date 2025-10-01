@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /*?*  # Evita indexar URLs con parámetros
+Disallow: /.netlify  # Bloquea rutas internas de Netlify
+Sitemap: https://radiopower.netlify.app/sitemap.xml
