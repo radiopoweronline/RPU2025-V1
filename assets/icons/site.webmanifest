@@ -1,6 +1,6 @@
 {
-    "name": "Radio Power Urbana",
-    "short_name": "Radio_power_urbana",
+    "name": "Radio Power",
+    "short_name": "Radio_power",
     "icons": [
         {
             "src": "/assets/icons/android-chrome-192x192.png",
@@ -17,5 +17,6 @@
     "background_color": "#000000",
     "display": "standalone"
 }
+
 
 
