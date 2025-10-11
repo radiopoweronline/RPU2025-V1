@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+body {
+    box-sizing: border-box;
+    font-family: 'Orbitron', monospace;
+    background: #1a1a2e;
+    min-height: 100vh;
+}
+
+.slide { 
+    transition: opacity 0.3s ease; 
+}
+
+.slide.inactive { 
+    opacity: 0; 
+}
+
+.slide.active { 
+    opacity: 1; 
+}
+
+.modal-backdrop { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.85); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 50; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity .2s;
+}
+
+.modal-backdrop.open { 
+    opacity: 1; 
+    pointer-events: all;
+}
+
+.modal-content { 
+    background: #222; 
+    border-radius: 1.5rem; 
+    max-width: 600px; 
+    width: 95vw; 
+    max-height: 90vh; 
+    overflow: auto; 
+    position: relative;
+}
+
+.modal-close { 
+    position: absolute; 
+    top: 1rem; 
+    right: 1rem; 
+    background: #111; 
+    border-radius: 50%; 
+    padding: .5rem; 
+    cursor: pointer;
+}
+
+.modal-nav { 
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    background: #111; 
+    border-radius: 50%; 
+    padding: .5rem; 
+    cursor: pointer; 
+    color: white; 
+    opacity: .85;
+}
+
+.modal-nav.left { 
+    left: .5rem; 
+}
+
+.modal-nav.right { 
+    right: .5rem; 
+}
+
+.mobile-menu { 
+    transition: transform .2s ease; 
+}
+
+.mobile-menu.open { 
+    transform: translateX(0);
+}
+
+.mobile-menu.closed { 
+    transform: translateX(100%);
+}
+
+/* Player styling */
+.radio-player-bar {
+    background: #0f0f23;
+    border-top: 1px solid rgba(0,255,255,0.2);
+}
+
+.volume-slider {
+    background: linear-gradient(to right, #00ffff 0%, #00ffff 70%, #374151 70%, #374151 100%);
+}
+
+.volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #00ffff;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #00ffff;
+    cursor: pointer;
+    border: none;
+}
+
+/* Slider styling - 20% menos de ancho */
+.slider-container {
+    aspect-ratio: 16 / 9.9;
+    max-height: 77vh;
+    max-width: 80%;
+    margin: 0 auto;
+    border-radius: 1.5rem;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .slider-container {
+        aspect-ratio: 16 / 9.9;
+        max-height: 55vh;
+        max-width: 95%;
+        border-radius: 1rem;
+    }
+
+    #djsGrid {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .dj-card {
+        width: 90%;
+        max-width: 300px;
+    }
+}
+
+/* Estilos para los puntos del slider */
+.slider-dot {
+    transition: all 0.2s ease;
+}
+
+.slider-dot.active {
+    background-color: #22d3ee;
+    transform: scale(1.1);
+}
+
+/* Cards de DJs reducidas en 10% */
+.dj-card {
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Estilos para los puntos del slider fuera del contenedor */
+#sliderDots {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    z-index: 10;
+}
