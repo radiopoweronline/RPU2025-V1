@@ -1,5 +1,5 @@
 {
-    "name": "Radio Power Urbana",
+    "name": "Radio Power - Urbana",
     "short_name": "Radio_Power",
     "icons": [
         {
@@ -18,3 +18,4 @@
     "display": "standalone"
 
 }
+
