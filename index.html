@@ -162,7 +162,195 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
 
      
+  <!-- CHAT SIMPLE (admin oculto con hora) -->
+<section id="chat" style="max-width:420px;margin:15px auto;font-family:Arial, sans-serif;">
+  <div style="background:#000;border:1px solid #2b2b2b;border-radius:8px;padding:10px;">
+    <h4 style="text-align:center;color:#00ff66;margin:0 0 8px;">💬 Chat Web 2</h4>
+
+    <div id="chat-box"
+      style="background:#0d0d0d;border:1px solid #333;border-radius:6px;
+      color:#bfffc7;height:220px;overflow-y:auto;padding:8px;font-size:14px;line-height:1.4;">
+    </div>
+
+    <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap;">
+      <input id="nombre" type="text" placeholder="Nombre"
+        style="flex:1;min-width:80px;padding:6px;border-radius:4px;
+        border:1px solid #333;background:#111;color:#fff;font-size:13px;">
+      <input id="mensaje" type="text" placeholder="Mensaje..."
+        style="flex:2;min-width:120px;padding:6px;border-radius:4px;
+        border:1px solid #333;background:#111;color:#fff;font-size:13px;">
+      <button id="enviar"
+        style="background:#8B5CF6;color:#fff;border:none;
+        padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;">Enviar</button>
+    </div>
+
+    <!-- Botón de admin oculto -->
+    <div id="admin-controls" style="display:none; text-align:center; margin-top:10px;">
+      <button id="clear-all"
+        style="background:#ff4444;color:#fff;border:none;padding:6px 12px;
+        border-radius:4px;cursor:pointer;font-size:13px;font-weight:bold;">🧹 Limpiar todo el chat</button>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getDatabase, ref, push, onChildAdded, remove, get, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+  // ✅ NUEVA CONFIGURACIÓN PARA TU SEGUNDA WEB
+  const firebaseConfig = {
+    apiKey: "AIzaSyCT-kdqNgKRyFnQnW7XlgDuRGXbi7oVeZA",
+    authDomain: "chat-ca936.firebaseapp.com",
+    databaseURL: "https://chat-ca936-default-rtdb.firebaseio.com",
+    projectId: "chat-ca936",
+    storageBucket: "chat-ca936.firebasestorage.app",
+    messagingSenderId: "414740953729",
+    appId: "1:414740953729:web:24e85566cd97fa0dd12b80"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const mensajesRef = ref(db, "mensajes_web2"); // ✅ Diferente nombre para separar chats
+
+  const chatBox = document.getElementById("chat-box");
+  const nombreInput = document.getElementById("nombre");
+  const mensajeInput = document.getElementById("mensaje");
+  const enviarBtn = document.getElementById("enviar");
+  const clearAllBtn = document.getElementById("clear-all");
+  const adminControls = document.getElementById("admin-controls");
+
+  // 🚫 Lista de malas palabras
+  const malasPalabras = [
+    "pendejo","pendeja","cabron","cabrón","mierda","malparido","malparida","gonorrea",
+    "chinga","chingar","chingada","puta","puto","put@","culiao","culera","culero",
+    "hpta","hp","verga","coño","carajo","marica","pirobo","guevon","güevon","guevón",
+    "boludo","pelotudo","idiota","imbecil","imbécil","tonto","bobo","estupido","estúpido"
+  ];
+
+  function limpiarTexto(texto) {
+    let limpio = texto;
+    malasPalabras.forEach(p => {
+      const regex = new RegExp("\\b" + p + "\\b", "gi");
+      limpio = limpio.replace(regex, "***");
+    });
+    return limpio;
+  }
+
+  function formatearHora(timestamp) {
+    const fecha = new Date(timestamp);
+    let horas = fecha.getHours();
+    const minutos = fecha.getMinutes().toString().padStart(2, "0");
+    const ampm = horas >= 12 ? "PM" : "AM";
+    horas = horas % 12 || 12;
+    return `${horas}:${minutos} ${ampm}`;
+  }
+
+  function agregarMensajeALaVista(msg, key = null) {
+    const div = document.createElement("div");
+    div.style.marginBottom = "6px";
+
+    const hora = formatearHora(msg.time);
+    div.innerHTML = `<strong style='color:#00ff66'>${msg.name}:</strong> `;
+    div.appendChild(document.createTextNode(msg.text + " "));
+    const spanHora = document.createElement("span");
+    spanHora.style.color = "#888";
+    spanHora.style.fontSize = "11px";
+    spanHora.textContent = `(${hora})`;
+    div.appendChild(spanHora);
+
+    const currentUser = nombreInput.value.trim();
+    if (currentUser === "LopDor") {
+      const del = document.createElement("button");
+      del.textContent = "🗑";
+      del.style.marginLeft = "8px";
+      del.style.background = "transparent";
+      del.style.border = "none";
+      del.style.cursor = "pointer";
+      del.style.color = "#ff5555";
+      del.onclick = () => remove(ref(db, "mensajes_web2/" + key));
+      div.appendChild(del);
+    }
+
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  // ✅ CARGAR MENSAJES EXISTENTES al iniciar
+  function cargarMensajesExistentes() {
+    onValue(mensajesRef, (snapshot) => {
+      const mensajes = snapshot.val();
+      chatBox.innerHTML = "";
       
+      if (mensajes) {
+        Object.entries(mensajes).forEach(([key, msg]) => {
+          agregarMensajeALaVista(msg, key);
+        });
+      }
+    });
+  }
+
+  // Cargar mensajes cuando la página se carga
+  document.addEventListener('DOMContentLoaded', cargarMensajesExistentes);
+
+  enviarBtn.onclick = () => {
+    const nombre = nombreInput.value.trim();
+    const mensaje = mensajeInput.value.trim();
+    if (!nombre || !mensaje) return;
+
+    if (nombre === "LopDor") adminControls.style.display = "block";
+
+    const textoLimpio = limpiarTexto(mensaje);
+    
+    // Agregar mensaje localmente inmediatamente
+    const mensajeLocal = {
+      name: nombre,
+      text: textoLimpio,
+      time: Date.now()
+    };
+    agregarMensajeALaVista(mensajeLocal);
+    
+    // Luego enviar a Firebase
+    push(mensajesRef, mensajeLocal);
+    mensajeInput.value = "";
+  };
+
+  // Permitir enviar con Enter
+  mensajeInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      enviarBtn.click();
+    }
+  });
+
+  clearAllBtn.onclick = async () => {
+    if (confirm("¿Seguro que deseas borrar TODO el chat?")) {
+      const snapshot = await get(mensajesRef);
+      snapshot.forEach(child => remove(ref(db, "mensajes_web2/" + child.key)));
+      chatBox.innerHTML = "";
+    }
+  };
+
+  // ✅ ESCUCHAR NUEVOS MENSAJES de otros usuarios
+  onChildAdded(mensajesRef, (data) => {
+    const msg = data.val();
+    
+    // Verificar si el mensaje ya fue mostrado localmente
+    const mensajesExistentes = chatBox.children;
+    let yaExiste = false;
+    
+    for (let i = 0; i < mensajesExistentes.length; i++) {
+      const elemento = mensajesExistentes[i];
+      if (elemento.textContent.includes(msg.text) && elemento.textContent.includes(msg.name)) {
+        yaExiste = true;
+        break;
+      }
+    }
+    
+    if (!yaExiste) {
+      agregarMensajeALaVista(msg, data.key);
+    }
+  });
+</script>
+    
 
 
 <!-- Redes Sociales + Copyright -->
