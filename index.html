@@ -161,8 +161,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
     
     
-<!-- CHAT (compacto y limpio) -->
-<section id="chat-lopdor" style="max-width:420px;margin:15px auto;font-family:Arial, sans-serif;">
+    <!-- CHAT SIMPLE (admin oculto) -->
+<section id="chat" style="max-width:420px;margin:15px auto;font-family:Arial, sans-serif;">
   <div style="background:#000;border:1px solid #2b2b2b;border-radius:8px;padding:10px;">
     <h4 style="text-align:center;color:#00ff66;margin:0 0 8px;">💬 Chat</h4>
 
@@ -182,12 +182,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         style="background:#00ff66;color:#000;border:none;
         padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;">Enviar</button>
     </div>
+
+    <!-- Botón de admin oculto -->
+    <div id="admin-controls" style="display:none; text-align:center; margin-top:10px;">
+      <button id="clear-all"
+        style="background:#ff4444;color:#fff;border:none;padding:6px 12px;
+        border-radius:4px;cursor:pointer;font-size:13px;font-weight:bold;">🧹 Limpiar todo el chat</button>
+    </div>
   </div>
 </section>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+  import { getDatabase, ref, push, onChildAdded, remove, get } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCT-kdqNgKRyFnQnW7XlgDuRGXbi7oVeZA",
@@ -206,12 +213,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const nombreInput = document.getElementById("nombre");
   const mensajeInput = document.getElementById("mensaje");
   const enviarBtn = document.getElementById("enviar");
+  const clearAllBtn = document.getElementById("clear-all");
+  const adminControls = document.getElementById("admin-controls");
 
+  // 🚫 Lista ampliada de malas palabras latinas
   const malasPalabras = [
     "pendejo","pendeja","cabron","cabrón","mierda","malparido","malparida","gonorrea",
     "chinga","chingar","chingada","puta","puto","put@","culiao","culera","culero",
     "hpta","hp","verga","coño","carajo","marica","pirobo","guevon","güevon","guevón",
-    "boludo","pelotudo","tonto","idiota","imbecil","imbécil"
+    "boludo","pelotudo","idiota","imbecil","imbécil","tonto","bobo","estupido","estúpido"
   ];
 
   function limpiarTexto(texto) {
@@ -227,9 +237,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const nombre = nombreInput.value.trim();
     const mensaje = mensajeInput.value.trim();
     if (!nombre || !mensaje) return;
+
+    // Mostrar controles de admin si el usuario es LopDor
+    if (nombre === "LopDor") adminControls.style.display = "block";
+
     const textoLimpio = limpiarTexto(mensaje);
     push(mensajesRef, { name: nombre, text: textoLimpio, time: Date.now() });
     mensajeInput.value = "";
+  };
+
+  // 🧹 Limpiar todo el chat (solo visible para LopDor)
+  clearAllBtn.onclick = async () => {
+    if (confirm("¿Seguro que deseas borrar TODO el chat?")) {
+      const snapshot = await get(mensajesRef);
+      snapshot.forEach(child => remove(ref(db, "mensajes/" + child.key)));
+      chatBox.innerHTML = "";
+    }
   };
 
   onChildAdded(mensajesRef, (data) => {
@@ -238,7 +261,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     div.style.marginBottom = "6px";
     div.innerHTML = `<strong style='color:#00ff66'>${msg.name}:</strong> ${msg.text}`;
 
-    if (msg.name === "LopDor") {
+    // Mostrar botón 🗑 solo si el usuario actual es LopDor
+    const currentUser = nombreInput.value.trim();
+    if (currentUser === "LopDor") {
       const del = document.createElement("button");
       del.textContent = "🗑";
       del.style.marginLeft = "8px";
