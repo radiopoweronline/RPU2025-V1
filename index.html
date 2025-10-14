@@ -160,12 +160,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </section>
     
-
-     
-  <!-- CHAT SIMPLE (admin oculto con hora) -->
+<!-- CHAT SIMPLE (admin oculto con hora) -->
 <section id="chat" style="max-width:420px;margin:15px auto;font-family:Arial, sans-serif;">
   <div style="background:#000;border:1px solid #2b2b2b;border-radius:8px;padding:10px;">
-    <h4 style="text-align:center;color:#00ff66;margin:0 0 8px;">💬 Chat</h4>
+    <h4 style="text-align:center;color:#00ff66;margin:0 0 8px;">💬 Chat Web 2</h4>
 
     <div id="chat-box"
       style="background:#0d0d0d;border:1px solid #333;border-radius:6px;
@@ -238,11 +236,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function formatearHora(timestamp) {
     const fecha = new Date(timestamp);
-    let horas = fecha.getHours();
-    const minutos = fecha.getMinutes().toString().padStart(2, "0");
-    const ampm = horas >= 12 ? "PM" : "AM";
-    horas = horas % 12 || 12;
-    return `${horas}:${minutos} ${ampm}`;
+    const ahora = new Date();
+    const diffMs = ahora - fecha; // Diferencia en milisegundos
+    const diffMinutos = Math.floor(diffMs / (1000 * 60)); // Diferencia en minutos
+    const diffHoras = Math.floor(diffMs / (1000 * 60 * 60)); // Diferencia en horas
+    const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24)); // Diferencia en días
+    const diffMeses = Math.floor(diffDias / 30); // Aproximación de meses
+    const diffAnios = Math.floor(diffDias / 365); // Aproximación de años
+
+    // Lógica para mostrar la fecha relativa
+    if (diffMinutos < 60) {
+      return `hace ${diffMinutos} minuto${diffMinutos === 1 ? "" : "s"}`; // Ej: "hace 20 minutos"
+    } else if (diffHoras < 24) {
+      return `hace ${diffHoras} hora${diffHoras === 1 ? "" : "s"}`; // Ej: "hace 17 horas"
+    } else if (diffDias === 1) {
+      return `hace un día`; // Ej: "hace un día"
+    } else if (diffDias < 7) {
+      return `hace ${diffDias} días`; // Ej: "hace 2 días"
+    } else if (diffDias < 14) {
+      return `hace una semana`; // Ej: "hace una semana"
+    } else if (diffMeses < 2) {
+      return `hace un mes`; // Ej: "hace un mes"
+    } else if (diffAnios < 1) {
+      return `hace ${diffDias} días`; // Ej: "hace 45 días"
+    } else {
+      return `hace ${diffAnios} año${diffAnios === 1 ? "" : "s"}`; // Ej: "hace 1 año" o "hace 2 años"
+    }
   }
 
   function agregarMensajeALaVista(msg, key = null) {
@@ -350,8 +369,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   });
 </script>
-    
-
 
 <!-- Redes Sociales + Copyright -->
 <section id="social-media" class="m-0 mb-10 p-0">
