@@ -509,5 +509,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <script src="script.js" defer></script>
 
+
+<script>
+  // Bloquear menú contextual (clic derecho)
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+    }
+  });
+</script>
+
+
 </body>
 </html>
