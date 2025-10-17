@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio Power - Urbana</title>
+    <title>Radio Power Urbana</title>
     
 	<!-- Metadatos SEO esenciales -->
-    <meta name="description" content="Radio Power: Reguetón clásico en radiopower-urbana.netlify.app">
-    <meta property="og:title" content="Radio Power">
-    <meta property="og:description" content="Música Reguetón en radiopower-urbana.netlify.app">
+    <meta name="description" content="Radio Power: Reguetón clásico, Bachata, Exitos 24/7 en Radiopower-Urbana">
+    <meta property="og:title" content="Radio Power Urbana">
+    <meta property="og:description" content="Música Reguetón en radiopower-urbana">
     <meta property="og:image" content="https://radiopower-urbana.netlify.app/assets/logo.webp">
     <meta property="og:url" content="https://radiopower-urbana.netlify.app">
     <meta property="og:type" content="website">
@@ -416,64 +416,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         © <span id="year"></span> Radio Power. Todos los derechos reservados.
       </p> </div>video bg-black rounded-2xl"></div>
     </div>
- 
-</section>
-
-<script>
+ <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
-
-    <!-- Radio Player Bar -->
-    <div id="radioPlayer" class="fixed bottom-0 left-0 right-0 z-50 radio-player-bar">
-        <div class="container mx-auto px-4 sm:px-6 py-2.5">
-            <div class="flex items-center justify-between gap-4">
-                <!-- Song Info -->
-                <div class="flex items-center gap-4 min-w-0 flex-1">
-                    <div class="w-30 h-15 sm:w-20 sm:h-14 bg-transparent rounded-xl flex items-center justify-center flex-shrink-0">
-					<img src="assets/logo.webp" alt="Logo Radio Power" class="w-24 h-12" width="96" height="48" loading="eager">
-					</div>
-                    <div class="min-w-0 flex-1">
-                        <div class="text-white font-bold text-sm sm:text-base truncate" id="currentTrack">
-                            Radio Power
-                        </div>
-                        <div class="text-cyan-400 text-xs sm:text-sm truncate" id="currentArtist">
-                            Urbana 
-                        </div>
-                    </div>
-                </div>
-                <!-- Player Controls -->
-                <div class="flex items-center gap-3">
-                    <button id="playPauseBtn" class="w-11 h-11 sm:w-12 sm:h-12 bg-red-500 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-red-600">
-                        <svg id="playIcon" class="w-5 h-5 sm:w-6 sm:h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                        <svg id="pauseIcon" class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                        </svg>
-                    </button>
-                </div>
-                <!-- Volume Control & Status -->
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2">
-                        <button id="muteBtn" class="w-8 h-8 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-600/50 hover:border-cyan-400/50 rounded-lg flex items-center justify-center transition-all duration-200">
-                            <svg id="volumeIcon" class="w-4 h-4 text-gray-300 hover:text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                            </svg>
-                            <svg id="muteIcon" class="w-4 h-4 text-gray-300 hover:text-cyan-400 hidden" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
-                            </svg>
-                        </button>
-                        <div class="hidden lg:flex items-center gap-2">
-                            <input type="range" id="volumeSlider" min="0" max="100" value="70" class="w-16 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer volume-slider">
-                            <span id="volumeValue" class="text-gray-400 text-xs font-medium w-7 text-center">70%</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- Streaming audio element (hidden) -->
-                <audio id="audioStream" src="https://stream.zeno.fm/cxf1r8zukyhuv" preload="none"></audio>
-            </div>
-        </div>
-    </div>
+</section>
 
     <!-- Modal para galería -->
     <div id="imageModal" class="modal-backdrop">
@@ -519,6 +465,68 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 </script>
 
+<!-- Radio Player Bar -->
+<div id="radioPlayer" class="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-black/95 via-gray-900/95 to-black/95 backdrop-blur-xl border-t border-cyan-400/20 shadow-xl">
+    <div class="container mx-auto px-4 sm:px-6 py-2.5">
+        <div class="flex items-center justify-between gap-4">
+            <!-- Song Info -->
+            <div class="flex items-center gap-4 min-w-0 flex-1">
+                <!-- Logo radio -->
+                                  <div class="flex items-center gap-4 min-w-0 flex-1">
+                    <div class="w-30 h-15 sm:w-20 sm:h-14 bg-transparent rounded-xl flex items-center justify-center flex-shrink-0">
+                    					<img src="assets/logo.webp" alt="Logo Radio Power" class="w-24 h-12" width="96" height="48" loading="eager">
+                </div>
+                
+                <!-- Track Info -->
+                <div class="min-w-0 flex-1">
+                    <div class="text-white font-bold text-sm sm:text-base truncate" id="currentTrack">
+                        Radio Power
+                    </div>
+                    <div class="text-cyan-400 text-xs sm:text-sm truncate" id="currentArtist">
+                        En Vivo
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Controls -->
+            <div class="flex items-center gap-3">
+                <!-- Play/Pause Button -->
+                <button id="playPauseBtn" class="w-11 h-11 sm:w-12 sm:h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 shadow-md">
+                    <svg id="playIcon" class="w-5 h-5 sm:w-6 sm:h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg id="pauseIcon" class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                    <svg id="loadingIcon" class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 4.515l-7 7 7 7M8.515 11.515h11"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Volume Control & Status -->
+            <div class="flex items-center gap-3">
+                <!-- Volume Control -->
+                <div class="flex items-center gap-2">
+                    <button id="muteBtn" class="w-8 h-8 bg-gray-800/60 hover:bg-gray-700/80 border border-gray-600/50 hover:border-cyan-400/50 rounded-lg flex items-center justify-center transition-all duration-200">
+                        <svg id="volumeIcon" class="w-4 h-4 text-gray-300 hover:text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                        <svg id="muteIcon" class="w-4 h-4 text-gray-300 hover:text-cyan-400 hidden" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                        </svg>
+                    </button>
+                    
+                    <!-- Volume Slider (Desktop only) -->
+                    <div class="hidden lg:flex items-center gap-2">
+                        <input type="range" id="volumeSlider" min="0" max="100" value="70" class="w-16 h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer volume-slider">
+                        <span id="volumeValue" class="text-gray-400 text-xs font-medium w-7 text-center">70%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
