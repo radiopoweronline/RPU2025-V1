@@ -221,65 +221,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// --- Player Logic ---
-const audioStream = document.getElementById('audioStream');
-const playPauseBtn = document.getElementById('playPauseBtn');
-const playIcon = document.getElementById('playIcon');
-const pauseIcon = document.getElementById('pauseIcon');
-const muteBtn = document.getElementById('muteBtn');
-const volumeIcon = document.getElementById('volumeIcon');
-const muteIcon = document.getElementById('muteIcon');
-const volumeSlider = document.getElementById('volumeSlider');
-const volumeValue = document.getElementById('volumeValue');
-
-let isPlaying = false;
-let isMuted = false;
-const streamUrl = 'https://stream.zeno.fm/cxf1r8zukyhuv';
-
-playPauseBtn.addEventListener('click', () => {
-    if (isPlaying) {
-        audioStream.pause();
-        audioStream.src = ''; // Clear src to stop buffering
-        playIcon.classList.remove('hidden');
-        pauseIcon.classList.add('hidden');
-    } else {
-        audioStream.src = streamUrl; // Reload stream
-        audioStream.play();
-        playIcon.classList.add('hidden');
-        pauseIcon.classList.remove('hidden');
-    }
-    isPlaying = !isPlaying;
-});
-muteBtn.addEventListener('click', () => {
-    isMuted = !isMuted;
-    audioStream.muted = isMuted;
-    if (isMuted) {
-        volumeIcon.classList.add('hidden');
-        muteIcon.classList.remove('hidden');
-        volumeSlider.style.opacity = '0.5';
-    } else {
-        volumeIcon.classList.remove('hidden');
-        muteIcon.classList.add('hidden');
-        volumeSlider.style.opacity = '1';
-    }
-});
-volumeSlider.addEventListener('input', (e) => {
-    const vol = parseInt(e.target.value, 10);
-    audioStream.volume = vol / 100;
-    volumeValue.textContent = `${vol}%`;
-    const percentage = (vol / 100) * 100;
-    volumeSlider.style.background = 
-        `linear-gradient(to right, #00ffff 0%, #00ffff ${percentage}%, #374151 ${percentage}%, #374151 100%)`;
-    if (vol > 0 && isMuted) {
-        muteBtn.click();
-    }
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-    volumeSlider.value = 70;
-    audioStream.volume = 0.7;
-    volumeValue.textContent = '70%';
-});
 
 // Smooth scroll for menu
 document.addEventListener('DOMContentLoaded', () => {
@@ -334,3 +275,174 @@ window.addEventListener('DOMContentLoaded',()=>{
   renderDJs();
   renderGallery();
 });
+
+// Radio Player Functionality
+class RadioPlayer {
+    constructor() {
+        this.isPlaying = false;
+        this.isMuted = false;
+        this.volume = 70;
+        this.currentTime = 0;
+        this.progressInterval = null;
+        this.audio = null;
+        this.streamUrl = 'https://stream.zeno.fm/cxf1r8zukyhuv';
+        
+        this.initializeElements();
+        this.bindEvents();
+    }
+
+    initializeElements() {
+        this.playPauseBtn = document.getElementById('playPauseBtn');
+        this.playIcon = document.getElementById('playIcon');
+        this.pauseIcon = document.getElementById('pauseIcon');
+        this.loadingIcon = document.getElementById('loadingIcon');
+        this.muteBtn = document.getElementById('muteBtn');
+        this.volumeIcon = document.getElementById('volumeIcon');
+        this.muteIcon = document.getElementById('muteIcon');
+        this.volumeSlider = document.getElementById('volumeSlider');
+        this.volumeValue = document.getElementById('volumeValue');
+
+        this.currentTrack = document.getElementById('currentTrack');
+        this.currentArtist = document.getElementById('currentArtist');
+    }
+
+    bindEvents() {
+        this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+        this.muteBtn.addEventListener('click', () => this.toggleMute());
+        this.volumeSlider.addEventListener('input', (e) => this.setVolume(e.target.value));
+    }
+
+    initializeAudio() {
+        // Always create a fresh audio instance to avoid buffering
+        this.audio = new Audio();
+        this.audio.src = this.streamUrl + '?t=' + Date.now(); // Add timestamp to prevent caching
+        this.audio.volume = this.volume / 100;
+        this.audio.preload = 'none';
+        
+        this.audio.addEventListener('loadstart', () => {
+            this.showLoadingState();
+        });
+        
+        this.audio.addEventListener('canplay', () => {
+            this.hideLoadingState();
+        });
+        
+        this.audio.addEventListener('error', (e) => {
+            this.isPlaying = false;
+            this.hideLoadingState();
+            this.updatePlayButton();
+        });
+        
+        this.audio.addEventListener('waiting', () => {
+            this.showLoadingState();
+        });
+        
+        this.audio.addEventListener('playing', () => {
+            this.hideLoadingState();
+        });
+    }
+
+    togglePlayPause() {
+        this.isPlaying = !this.isPlaying;
+        
+        if (this.isPlaying) {
+            // Always create fresh audio instance when playing
+            this.initializeAudio();
+            this.audio.play().catch(e => {
+                console.error('Error playing audio:', e);
+                this.isPlaying = false;
+                this.updatePlayButton();
+            });
+        } else {
+            // Stop and destroy audio instance when pausing
+            if (this.audio) {
+                this.audio.pause();
+                this.audio.src = '';
+                this.audio = null;
+            }
+        }
+        
+        this.updatePlayButton();
+    }
+
+    // Auto-start the radio when page loads
+    autoStart() {
+        setTimeout(() => {
+            this.togglePlayPause();
+        }, 1000);
+    }
+
+    showLoadingState() {
+        // No loading animation
+    }
+
+    hideLoadingState() {
+        // No loading animation
+    }
+
+    updatePlayButton() {
+        if (this.isPlaying) {
+            this.playIcon.classList.add('hidden');
+            this.pauseIcon.classList.remove('hidden');
+            this.playPauseBtn.classList.add('pulse-animation');
+        } else {
+            this.playIcon.classList.remove('hidden');
+            this.pauseIcon.classList.add('hidden');
+            this.playPauseBtn.classList.remove('pulse-animation');
+        }
+    }
+
+    toggleMute() {
+        this.isMuted = !this.isMuted;
+        
+        if (this.audio) {
+            this.audio.muted = this.isMuted;
+        }
+        
+        if (this.isMuted) {
+            this.volumeIcon.classList.add('hidden');
+            this.muteIcon.classList.remove('hidden');
+            this.volumeSlider.style.opacity = '0.5';
+        } else {
+            this.volumeIcon.classList.remove('hidden');
+            this.muteIcon.classList.add('hidden');
+            this.volumeSlider.style.opacity = '1';
+        }
+        
+        // Volume toggled
+    }
+
+    setVolume(value) {
+        this.volume = value;
+        this.volumeValue.textContent = `${value}%`;
+        
+        if (this.audio) {
+            this.audio.volume = value / 100;
+        }
+        
+        // Update slider background
+        const percentage = (value / 100) * 100;
+        this.volumeSlider.style.background = 
+            `linear-gradient(to right, #00ffff 0%, #00ffff ${percentage}%, #374151 ${percentage}%, #374151 100%)`;
+        
+        // Auto-unmute if volume is increased
+        if (value > 0 && this.isMuted) {
+            this.toggleMute();
+        }
+    }
+
+    updateTrackInfo(title, artist) {
+        this.currentTrack.textContent = title;
+        this.currentArtist.textContent = artist;
+        
+        // Reset progress for new track
+        this.currentTime = 0;
+        this.progressBar.style.width = '0%';
+    }
+}
+
+// Initialize Radio Player
+const radioPlayer = new RadioPlayer();
+
+// Auto-start radio after page loads
+radioPlayer.autoStart();
